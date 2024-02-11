@@ -11,7 +11,7 @@ class Command(BaseCommand):
         if not Genre.objects.exists():
             url = "https://moviesminidatabase.p.rapidapi.com/genres/"
             headers = {
-	            "X-RapidAPI-Key": "1a9c94a040mshf0ae8227e7e5fcep1aad30jsn473bf334e6ce",
+	            "X-RapidAPI-Key": "a vot ne dam)",
 	            "X-RapidAPI-Host": "moviesminidatabase.p.rapidapi.com"
             }
             genre_response = requests.get(url, headers=headers).json()['results']
@@ -29,7 +29,7 @@ class Command(BaseCommand):
             querystring = {"page":"1"}
             headers = {
 	            "Type": "get-trending-movies",
-	            "X-RapidAPI-Key": "ba65851563msh3b845e7709019f8p1d3e75jsn97a7694e7a63",
+	            "X-RapidAPI-Key": "a vot ne dam)",
 	            "X-RapidAPI-Host": "movies-tv-shows-database.p.rapidapi.com"
             }
 
@@ -77,7 +77,7 @@ class Command(BaseCommand):
             querystring = {"page":"1"}
             headers = {
 	            "Type": "get-trending-shows",
-	            "X-RapidAPI-Key": "ba65851563msh3b845e7709019f8p1d3e75jsn97a7694e7a63",
+	            "X-RapidAPI-Key": "a vot ne dam)",
 	            "X-RapidAPI-Host": "movies-tv-shows-database.p.rapidapi.com"
             }
             
@@ -126,7 +126,7 @@ class Command(BaseCommand):
             url = "https://movies-tv-shows-database.p.rapidapi.com/"
             headers = {
 	            "Type": None,
-	            "X-RapidAPI-Key": "ba65851563msh3b845e7709019f8p1d3e75jsn97a7694e7a63",
+	            "X-RapidAPI-Key": "a vot ne dam)3",
 	            "X-RapidAPI-Host": "movies-tv-shows-database.p.rapidapi.com"
             }
             
