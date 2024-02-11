@@ -1,0 +1,346 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+	<style>
+		.card__description {
+			overflow: hidden;
+			height: 150px; /* Фиксированная высота текста */
+			margin-top: 10px;
+			position: relative;
+			background-color: rgba(0,0,0,0);
+		}
+		
+		.card__description.expanded {
+			height: auto; /* Полный текст при активации класса .expanded */
+		}
+		
+		#toggleButton {
+			display: block;
+			margin-top: 5px;
+		}
+	</style>
+	
+	<header class="header">
+		<div class="header__wrap">
+			<div class="container">
+				<div class="row">
+					<div class="col-12">
+						<div class="header__content">
+					
+							
+								<img src="static/images/logo.svg" alt="" width="10%" height="50%">
+
+							
+							<ul class="header__nav">
+								
+								<li class="header__nav-item">
+									<a class="dropdown-toggle header__nav-link" href="{% url 'home' %}">Главная</a>
+								</li>
+							
+
+						
+								<li class="header__nav-item">
+									<a class="dropdown-toggle header__nav-link" href="{% url 'catalog' %}">МЕДИА</a>
+								</li>
+
+								<li class="header__nav-item">
+									<a href="{% url 'faq' %}" class="header__nav-link">Помощь</a>
+								</li>
+
+								<li class="dropdown header__nav-item">
+									<a class="dropdown-toggle header__nav-link header__nav-link--more" href="#" role="button" id="dropdownMenuMore" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="icon ion-ios-more"></i></a>
+
+									<ul class="dropdown-menu header__dropdown-menu" aria-labelledby="dropdownMenuMore">
+										<li><a href="{% url 'about' %}">О НАС</a></li>
+									</ul>
+								</li>
+							</ul>
+							
+
+							<div class="header__auth">
+								<button class="header__search-btn" type="button">
+									<i class="icon ion-ios-search"></i>
+								</button>
+
+								{% if not request.user.is_authenticated %}
+								<a href="{% url 'login' %}" class="header__sign-in">
+									<i class="icon ion-ios-log-in"></i>
+									<span>ВОЙТИ</span>
+								</a>
+								{% else %}
+								<a href="{% url 'profile' request.user.pk %}">
+									<img src="{{ request.user.avatar.url }}" alt="avatar_user" width="50px" height="50px"
+									style="margin-left: 20px; border-radius:15px;">
+								</a>
+								{% endif %}
+							</div>
+
+							<button class="header__btn" type="button">
+								<span></span>
+								<span></span>
+								<span></span>
+							</button>
+							
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	
+		<form action="#" class="header__search">
+			<div class="container">
+				<div class="row">
+					<div class="col-12">
+						<div class="header__search-content">
+							<input type="text" placeholder="Search for a movie, TV Series that you are looking for">
+
+							<button type="button">ИСКАТЬ</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+
+	</header>
+
+	<!-- details -->
+	<section class="section details">
+		<!-- details background -->
+		<div class="details__bg" data-bg="img/home/home__bg.jpg"></div>
+		<!-- end details background -->
+
+		<!-- details content -->
+		<div class="container">
+			<div class="row">
+				<!-- title -->
+				<div class="col-12">
+					<h1 class="details__title">{{ media.title }}</h1>
+				</div>
+				<!-- end title -->
+
+				<!-- content -->
+				<div class="col-12 col-xl-6">
+					<div class="card card--details">
+						<div class="row">
+							<!-- card cover -->
+							<div class="col-12 col-sm-4 col-md-4 col-lg-3 col-xl-5">
+								<div class="card__cover">
+									<img src="{{ media.cover.url }}" alt="" width="100%">
+								</div>
+							</div>
+							<!-- end card cover -->
+
+							<!-- card content -->
+							<div class="col-12 col-sm-8 col-md-8 col-lg-9 col-xl-7">
+								<div class="card__content">
+									<div class="card__wrap">
+										<span class="card__rate"><i class="icon ion-ios-star"></i>{{ media.rating }}</span>
+
+										<ul class="card__list">
+											<li>HD</li>
+											<li>16+</li>
+										</ul>
+									</div>
+
+									<ul class="card__meta">
+										<li><span style="color: darkkhaki;">Жанр:</span>
+										<a>{{ media.genre.genre_name }}</a></li>
+										<li><span style="color: darkkhaki;">Год:</span> {{ media.year }}</li>
+										<li><span style="color: darkkhaki;">Продолжительность:</span> {{ media.duration }} min</li>
+										<li><span style="color: darkkhaki;">Страна:</span> <a>{{ media.country }}</a> </li>
+										<li><span style="color: darkkhaki;">Актеры: </span> {{ actors }}</li>
+									</ul>
+
+									<div class="card__description" id="description">
+										<div>
+											<span style="color: darkkhaki;">Описание: </span> <span style="color: white;">{{ media.body }}</span>
+										</div>
+									</div>
+									<button id="toggleButton" style="display: none; color:aliceblue">&#9658; Показать полный текст</button>
+								</div>
+							</div>
+							<!-- end card content -->
+						</div>
+					</div>
+				</div>
+				<!-- end content -->
+
+				<!-- player -->
+				{% if media.youtube_trailer_key %}
+				<div class="col-12 col-xl-6">
+					<iframe width="100%" height="300" src="https://www.youtube.com/embed/{{ media.youtube_trailer_key }}" frameborder="0" allowfullscreen></iframe>
+				</div>
+				{% endif %}
+				<!-- end player -->
+
+				<div class="col-12">
+					<div class="details__wrap">
+						<!-- availables -->
+						<div class="details__devices">
+							<span class="details__devices-title">Доступно на:</span>
+							<ul class="details__devices-list">
+								<li><i class="icon ion-logo-apple"></i><span>IOS</span></li>
+								<li><i class="icon ion-logo-android"></i><span>Android</span></li>
+								<li><i class="icon ion-logo-windows"></i><span>Windows</span></li>
+								<li><i class="icon ion-md-tv"></i><span>Smart TV</span></li>
+							</ul>
+						</div>
+						<!-- end availables -->
+
+						<!-- share -->
+						<div class="details__share">
+							<span class="details__share-title">Поделитесь с друзьями:</span>
+
+							<ul class="details__share-list">
+								<li class="facebook"><a href="#"><i class="icon ion-logo-facebook"></i></a></li>
+								<li class="instagram"><a href="#"><i class="icon ion-logo-instagram"></i></a></li>
+								<li class="twitter"><a href="#"><i class="icon ion-logo-twitter"></i></a></li>
+								<li class="vk"><a href="#"><i class="icon ion-logo-vk"></i></a></li>
+							</ul>
+						</div>
+						<!-- end share -->
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- end details content -->
+	</section>
+	<!-- end details -->	
+
+
+<!-- content -->
+<section class="content">
+	<div class="content__head">
+		<div class="container">
+			<div class="row">
+				<div class="col-12">
+					<h2 class="content__title">Отзывы</h2>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="container">
+		<div class="row">
+			<div class="col-12 col-lg-8 col-xl-8">
+				<div class="tab-content" id="myTabContent">
+						<div class="row">
+							<div class="col-12">
+								<div class="reviews">
+
+									<form method="post" class="form">
+										{% csrf_token %}
+										<input type="text" class="form__input" placeholder="Заголовок" name="title">
+										<textarea class="form__textarea" placeholder="Отзыв" name="body"></textarea>
+
+										
+										<div class="filter__item" id="filter__rate" style="width: 10rem;">
+											<span style="color: white;">Оценка: </span><input type="range" id="rangeInput" name="rangeInput" min="1" max="10" value="1"><span id="output" style="color: aliceblue;">1</span>
+										</div>
+										{% if request.user.is_authenticated %}
+											<button type="submit" class="form__btn">Оставить отзыв</button>
+										{% else %}
+											<a href="{% url 'login' %}">
+												<button type="button" class="form__btn">Оставить отзыв</button>
+											</a>
+										{% endif %}
+									</form><br><br>
+
+									
+									<ul class="reviews__list">
+										{% for review in reviews %}
+											<li class="reviews__item">
+												<div class="reviews__autor">
+													<img class="reviews__avatar" src="{{ review.user.avatar.url }}" alt="">
+													<span class="reviews__name">{{ review.title }}</span>
+													<span class="reviews__time">{{ review.created_at }} by {{ review.user.username }}</span>
+
+													<span class="reviews__rating"><i class="icon ion-ios-star"></i>{{ review.rating }}</span>
+												</div>
+												<p class="reviews__text">{{ review.body }}</p>
+											</li>
+										{% endfor %}
+									</ul>
+
+
+								</div>
+								<div class="col-12">
+									{% if reviews.has_next %}
+										<a href="{% url 'details' media_pk %}?show_page={{ reviews.next_page_number }}" class="section__btn">Show more</a>
+									{% else %}
+										<a class="section__btn">Загрузить еще</a>
+									{% endif %}
+								</div>
+							</div>
+						</div>
+				</div>
+			</div>
+
+			<div class="col-12 col-lg-4 col-xl-4">
+				<div class="row">
+
+					<div class="col-12">
+						<h2 class="section__title section__title--sidebar">Вам также может понравиться...</h2>
+					</div>
+
+					{% for also_media in alsoLikeMedias %}
+					<div class="col-6 col-sm-4 col-lg-6">
+						<div class="card">
+							<div class="card__cover">
+								<img src="{{ also_media.cover.url }}" alt="" width="100%">
+								<a href="{% url 'details' also_media.pk %}" class="card__play">
+									<i class="icon ion-ios-play"></i>
+								</a>
+							</div>
+							<div class="card__content">
+								<h3 class="card__title"><a>{{ also_media.title }}</a></h3>
+								<span class="card__category">
+									<a>{{ also_media.genre.genre_name }}</a>
+								</span>
+								<span class="card__rate"><i class="icon ion-ios-star"></i>{{ also_media.rating }}</span>
+							</div>
+						</div>
+					</div>
+					{% endfor %}
+
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<!-- end content -->
+
+
+	<script>
+		var description = document.getElementById('description');
+		var toggleButton = document.getElementById('toggleButton');
+		
+		if (description.scrollHeight > description.clientHeight) {
+			toggleButton.style.display = 'block';
+		}
+		
+		toggleButton.addEventListener('click', function() {
+			description.classList.toggle('expanded');
+			toggleButton.classList.toggle('expanded');
+		
+			if (description.classList.contains('expanded')) {
+				toggleButton.innerHTML = '&#9660; Скрыть полный текст'; // Стрелка вниз
+			} else {
+				toggleButton.innerHTML = '&#9658; Показать полный текст'; // Стрелка вправо
+			}
+		});
+
+		const rangeInput = document.getElementById('rangeInput');
+		const output = document.getElementById('output');
+
+		rangeInput.addEventListener('input', function() {
+			output.textContent = rangeInput.value;
+		});
+		
+	</script>
+
+
+{% endblock %}

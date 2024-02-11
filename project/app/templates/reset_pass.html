@@ -1,0 +1,36 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Восстановление пароля</title>
+    <link rel="stylesheet" href="{% static 'fonts/material-icon/css/material-design-font.min.css'%}">
+    <link rel="stylesheet" href="{% static 'css/style.css'%}" type="text/css">
+</head>
+<body>
+
+    <div class="main">
+        <div class="container">
+            <div class="signup-content">
+                <form method="post" id="signup-form" class="signup-form">
+                    {% csrf_token %}
+                    <h2>Отправить письмо</h2>
+                    <div class="form-group">
+                        <input type="email" class="form-input" name="email" id="email" placeholder="Электронная почта"/>
+                    </div>
+                    <div style="position:relative; left:20rem; bottom:4.5rem;">
+                        <button class="submit-link submit" style="color: white; background-color:darkgrey;
+                        position:relative;right:10rem;top:5rem;">
+                            Сбросить Пароль
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

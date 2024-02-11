@@ -1,0 +1,141 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профиль пользователя</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url({% static 'images/body-bg.jpg' %});
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+
+        section {
+            margin: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .profile-image {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin-right: 20px;
+            object-fit: cover;
+        }
+
+        .profile-info {
+            flex-grow: 1;
+        }
+
+        .comments-container {
+            margin-bottom: 20px;
+        }
+
+        .comment {
+            background-color: #eee;
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 10px;
+            position: relative;
+        }
+
+        .delete-btn {
+            background-color: #f00;
+            color: #fff;
+            padding: 5px 10px;
+            border: none;
+            cursor: pointer;
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            text-decoration: none;
+        }
+
+        .edit-form {
+            margin-bottom: 20px;
+        }
+
+        .edit-form label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .edit-form input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+
+        .edit-form button {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .logout-btn {
+            background-color: #f00;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+
+    <section>
+        <div class="profile-container">
+            <img src="{{ user.avatar.url }}" alt="Аватар" class="profile-image">
+            <div class="profile-info">
+                <h2>{{ user.username }}</h2>
+                <p>Почта: {{ user.email }}</p>
+            </div>
+        </div>
+        <div class="edit-form">
+            <h3>Изменить данные:</h3>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                {{ form2.as_p }}
+                <button type="submit">Сохранить/Вернуться назад</button>
+            </form>
+        </div>
+        <a href="{% url 'logout' %}">
+            <button class="logout-btn">Выйти из аккаунта</button>
+        </a>
+
+
+        <div class="comments-container">
+            <h3>Ваши комментарии:</h3>
+            {% for review in reviews %}
+            <div class="comment">
+                <p>{{ review.title }}</p>
+                <a href="{% url 'del-review' review.pk %}" class="delete-btn">Удалить</a>
+            </div>
+        {% endfor %}
+        </div>
+    </section>
+</body>
+</html>

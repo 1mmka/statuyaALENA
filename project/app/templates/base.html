@@ -1,0 +1,279 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<!-- Font -->
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600%7CUbuntu:300,400,500,700" rel="stylesheet">
+	 
+	<!-- CSS -->
+	<link rel="stylesheet" href="{% static 'css/bootstrap-reboot.min.css'%}">
+	<link rel="stylesheet" href="{% static 'css/bootstrap-grid.min.css'%}">
+	<link rel="stylesheet" href="{% static 'css/owl.carousel.min.css'%}">
+	<link rel="stylesheet" href="{% static 'css/jquery.mCustomScrollbar.min.css'%}">
+	<link rel="stylesheet" href="{% static 'css/nouislider.min.css'%}">
+	<link rel="stylesheet" href="{% static 'css/ionicons.min.css'%}">
+	<link rel="stylesheet" href="{% static 'css/plyr.css'%}">
+	<link rel="stylesheet" href="{% static 'css/photoswipe.css'%}">
+	<link rel="stylesheet" href="{% static 'css/default-skin.css'%}">
+	<link rel="stylesheet" href="{% static 'css/main.css'%}">
+	<link rel="stylesheet" href="{% static 'css/ps.css'%}">
+
+	<!-- JS -->
+	<link rel="stylesheet" href="{% static 'js/jquery-3.3.1.min.js'%}">
+	<link rel="stylesheet" href="{% static 'js/bootstrap.bundle.min.js'%}">
+	<link rel="stylesheet" href="{% static 'js/owl.carousel.min.js'%}">
+	<link rel="stylesheet" href="{% static 'js/jquery.mousewheel.min.js'%}">
+	<link rel="stylesheet" href="{% static 'js/jquery.mCustomScrollbar.min.js'%}">
+	<link rel="stylesheet" href="{% static 'js/wNumb.js'%}">
+	<link rel="stylesheet" href="{% static 'js/nouislider.min.js'%}">
+	<link rel="stylesheet" href="{% static 'js/plyr.min.js'%}">
+	<link rel="stylesheet" href="{% static 'js/jquery.morelines.min.js'%}">
+	<link rel="stylesheet" href="{% static 'js/photoswipe.min.js'%}">
+	<link rel="stylesheet" href="{% static 'js/photoswipe-ui-default.min.js'%}">
+	<link rel="stylesheet" href="{% static 'js/main.js'%}">
+	
+
+	<!-- Favicons -->
+	<link rel="icon" type="image/png" href="icon/favicon-32x32.png" sizes="32x32">
+	<link rel="apple-touch-icon" href="icon/favicon-32x32.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="icon/apple-touch-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="icon/apple-touch-icon-114x114.png">
+	<link rel="apple-touch-icon" sizes="144x144" href="icon/apple-touch-icon-144x144.png">
+
+	<title>Фильмы Фликсандрекса</title>
+
+</head>
+<body class="body">
+
+	<!-- header -->
+	<header class="header">
+		<div class="header__wrap">
+			<div class="container">
+				<div class="row">
+					<div class="col-12">
+						<div class="header__content">
+					
+								
+							<img src="{% static 'images/logo.svg' %}" alt="" width="10%" height="50%">
+
+							
+							<ul class="header__nav">
+								
+								<li class="header__nav-item">
+									<a class="dropdown-toggle header__nav-link" href="{% url 'home' %}">Главная</a>
+								</li>
+							
+
+						
+								<li class="header__nav-item">
+									<a class="dropdown-toggle header__nav-link" href="{% url 'catalog' %}">МЕДИА</a>
+								</li>
+
+								<li class="header__nav-item">
+									<a href="{% url 'faq' %}" class="header__nav-link">Помощь</a>
+								</li>
+
+								<li class="dropdown header__nav-item">
+									<a class="dropdown-toggle header__nav-link header__nav-link--more" href="#" role="button" id="dropdownMenuMore" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="icon ion-ios-more"></i></a>
+
+									<ul class="dropdown-menu header__dropdown-menu" aria-labelledby="dropdownMenuMore">
+										<li><a href="{% url 'about' %}">О НАС</a></li>
+									</ul>
+								</li>
+							</ul>
+							
+
+							<div class="header__auth">
+								<button class="header__search-btn" type="button">
+									<i class="icon ion-ios-search"></i>
+								</button>
+
+								{% if not request.user.is_authenticated %}
+								<a href="{% url 'login' %}" class="header__sign-in">
+									<i class="icon ion-ios-log-in"></i>
+									<span>ВОЙТИ</span>
+								</a>
+								{% else %}
+								<a href="{% url 'profile' request.user.pk %}">
+									<img src="{{ request.user.avatar.url }}" alt="avatar_user" width="50px" height="50px"
+									style="margin-left: 20px; border-radius:15px;">
+								</a>
+								{% endif %}
+							</div>
+
+							<button class="header__btn" type="button">
+								<span></span>
+								<span></span>
+								<span></span>
+							</button>
+							
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	
+		<form method="post" class="header__search" action="{% url 'base-search' %}">
+			{% csrf_token %}
+			<div class="container">
+				<div class="row">
+					<div class="col-12">
+						<div class="header__search-content">
+							<input type="text" placeholder="Поиск фильма, телесериала, который вы ищете" name='search-data'>
+							<button type="submit">ИСКАТЬ</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+
+	</header>
+
+		{% block content %}
+    	{% endblock %}
+
+		<!-- partners -->
+		<section class="section">
+			<div class="container">
+				<div class="row">
+					<!-- section title -->
+					<div class="col-12">
+						<h2 class="section__title section__title--no-margin">Наши партнеры</h2>
+					</div>
+					<!-- end section title -->
+	
+					<!-- section text -->
+					<div class="col-12">
+						<p class="section__text section__text--last-with-margin">Наши партнеры - это надежные компании, с которыми мы вместе стремимся к успеху.</p>
+					</div>
+					<!-- end section text -->
+	
+					<!-- partner -->
+					<div class="col-6 col-sm-4 col-md-3 col-lg-2">
+						<a href="#" class="partner">
+							<img src="static/images/partners/themeforest-light-background.png" alt="" class="partner__img">
+						</a>
+					</div>
+					<!-- end partner -->
+	
+					<!-- partner -->
+					<div class="col-6 col-sm-4 col-md-3 col-lg-2">
+						<a href="#" class="partner">
+							<img src="static/images/partners/audiojungle-light-background.png" alt="" class="partner__img">
+						</a>
+					</div>
+					<!-- end partner -->
+	
+					<!-- partner -->
+					<div class="col-6 col-sm-4 col-md-3 col-lg-2">
+						<a href="#" class="partner">
+							<img src="static/images/partners/codecanyon-light-background.png" alt="" class="partner__img">
+						</a>
+					</div>
+					<!-- end partner -->
+	
+					<!-- partner -->
+					<div class="col-6 col-sm-4 col-md-3 col-lg-2">
+						<a href="#" class="partner">
+							<img src="static/images/partners/photodune-light-background.png" alt="" class="partner__img">
+						</a>
+					</div>
+					<!-- end partner -->
+	
+					<!-- partner -->
+					<div class="col-6 col-sm-4 col-md-3 col-lg-2">
+						<a href="#" class="partner">
+							<img src="static/images/partners/activeden-light-background.png" alt="" class="partner__img">
+						</a>
+					</div>
+					<!-- end partner -->
+	
+					<!-- partner -->
+					<div class="col-6 col-sm-4 col-md-3 col-lg-2">
+						<a href="#" class="partner">
+							<img src="static/images/partners/3docean-light-background.png" alt="" class="partner__img">
+						</a>
+					</div>
+					<!-- end partner -->
+				</div>
+			</div>
+		</section>
+		<!-- end partners -->
+
+	<!-- footer -->
+	<footer class="footer">
+		<div class="container">
+			<div class="row">
+				<!-- footer list -->
+				<div class="col-12 col-md-3">
+					<h6 class="footer__title">Установите наше приложение</h6>
+					<ul class="footer__app">
+						<li><a href="#"><img src="static/images/Download_on_the_App_Store_Badge.svg" alt=""></a></li>
+						<li><a href="#"><img src="static/images/google-play-badge.png" alt=""></a></li>
+					</ul>
+				</div>
+				<!-- end footer list -->
+
+				<!-- footer list -->
+				<div class="col-6 col-sm-4 col-md-3">
+					<h6 class="footer__title">Ресурсы</h6>
+					<ul class="footer__list">
+						<li><a href="{% url 'about' %}">О нас</a></li>
+						<li><a href="{% url 'faq' %}">Помощь</a></li>
+					</ul>
+				</div>
+				<!-- end footer list -->
+
+				<!-- footer list -->
+				<div class="col-6 col-sm-4 col-md-3">
+					<h6 class="footer__title">Юридический</h6>
+					<ul class="footer__list">
+						<li><a href="#">Условия использования</a></li>
+						<li><a href="#">Политика конфиденциальности</a></li>
+						<li><a href="#">Безопасность</a></li>
+					</ul>
+				</div>
+				<!-- end footer list -->
+
+				<!-- footer list -->
+				<div class="col-12 col-sm-4 col-md-3">
+					<h6 class="footer__title">Контакты</h6>
+					<ul class="footer__list">
+						<li><a href="tel:+18002345678">+77081917109</a></li>
+						<li><a href="mailto:support@moviego.com">support@flixandrex.kz</a></li>
+					</ul>
+					<ul class="footer__social">
+						<li class="facebook"><a href="#"><i class="icon ion-logo-facebook"></i></a></li>
+						<li class="instagram"><a href="#"><i class="icon ion-logo-instagram"></i></a></li>
+						<li class="twitter"><a href="#"><i class="icon ion-logo-twitter"></i></a></li>
+						<li class="vk"><a href="#"><i class="icon ion-logo-vk"></i></a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</footer>
+	<!-- end footer -->
+
+	<!-- JS -->
+	<script src="static/js/jquery-3.3.1.min.js"></script>
+	<script src="static/js/bootstrap.bundle.min.js"></script>
+	<script src="static/js/owl.carousel.min.js"></script>
+	<script src="static/js/jquery.mousewheel.min.js"></script>
+	<script src="static/js/jquery.mCustomScrollbar.min.js"></script>
+	<script src="static/js/wNumb.js"></script>
+	<script src="static/js/nouislider.min.js"></script>
+	<script src="static/js/plyr.min.js"></script>
+	<script src="static/js/jquery.morelines.min.js"></script>
+	<script src="static/js/photoswipe.min.js"></script>
+	<script src="static/js/photoswipe-ui-default.min.js"></script>
+	<script src="static/js/main.js"></script>
+
+</body>
+
+</html>

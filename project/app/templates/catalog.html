@@ -1,0 +1,245 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+	<style>
+		.genre-container {
+			width: 45%;
+			max-width: 150px;
+			margin-left: 20px;
+			text-align: left;
+		}
+		
+		label {
+			display: block;
+			margin-bottom: 5px;
+		}
+		
+		select {
+			width: 100%;
+			padding: 8px;
+			border: 1px solid #ccc;
+			border-radius: 4px;
+			box-sizing: border-box;
+		}
+		input[type="range"] {
+			width: 70%;
+			height: 5px;
+			margin: 10px 0;
+			background: #ddd;
+			border-radius: 5px;
+		  }
+	  
+		  input[type="range"]:focus {
+			outline: none;
+		  }
+	  
+		  input[type="range"]::-webkit-slider-thumb {
+			-webkit-appearance: none;
+			width: 15px;
+			height: 15px;
+			background: #4CAF50;
+			border-radius: 50%;
+			cursor: pointer;
+			margin-top: -5px;
+		  }
+	  
+		  input[type="range"]::-moz-range-thumb {
+			width: 15px;
+			height: 15px;
+			background: #4CAF50;
+			border-radius: 50%;
+			cursor: pointer;
+		  }
+	</style>
+
+
+
+	
+	<!-- page title -->
+	<section class="section section--first section--bg" data-bg="img/section/section.jpg">
+		<div class="container">
+			<div class="row">
+				<div class="col-12">
+					<div class="section__wrap">
+						<!-- section title -->
+						<h2 class="section__title">Список Фильмов/Сериалов</h2>
+						<!-- end section title -->
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- end page title -->
+
+	
+	<form id="genreForm" method="post" action="{% url 'catalog' %}">
+		{% csrf_token %}
+		<div class="filter">
+			<div class="container">
+				<div class="row">
+					<div class="col-12">
+						<div class="filter__content">
+							<div class="filter__items">
+								
+								<div class="filter__item" id="filter__genre">
+									<span class="filter__item-label">ЖАНРЫ:</span>
+									<select name="genre" style="border-radius:15px; background-color:#ccc;margin-top:5px;">
+										<option>{{ selected_genre }}</option>
+										{% for genre in genres %}
+											<option>{{ genre.genre_name }}</option>
+										{% endfor %}
+									</select>
+								</div>
+								
+								<div class="filter__item" id="filter__rate">
+									<span class="filter__item-label">Рейтинг</span>
+									<input type="range" id="rangeInput" name="rangeInput" min="1" max="10" value="1"><span id="output" style="color: aliceblue;">1</span>
+									<input type="range" id="rangeInput2" name="rangeInput2" min="1" max="10" value="10"> <span id="output2" style="color: aliceblue;">10</span>
+								</div>
+	
+								
+								<div class="filter__item" id="filter__year">
+									<span class="filter__item-label">ГОД ВЫХОДА</span>
+									<input type="range" id="rangeInput3" name="rangeInput3" min="2000" max="2024" value="2000"> <span id="output3" style="color: aliceblue;">2000</span>
+									<input type="range" id="rangeInput4" name="rangeInput4" min="2000" max="2024" value="2024"> <span id="output4" style="color: aliceblue;">2024</span>
+								</div>
+							</div>
+							
+							<button class="filter__btn" type="submit">Принять фильтры</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+
+	<!-- catalog -->
+	<div class="catalog">
+		<div class="container">
+			<div class="row">
+
+				{% for data in media %}
+	<!-- card -->
+	<div class="col-6 col-sm-12 col-lg-6">
+		<div class="card card--list">
+			<div class="row">
+				<div class="col-12 col-sm-4">
+					<div class="card__cover">
+						<img src="{{ data.cover.url }}" alt="" width="100%">
+						<a href="{% url 'details' data.pk %}" class="card__play">
+							<i class="icon ion-ios-play"></i>
+						</a>
+					</div>
+				</div>
+
+				<div class="col-12 col-sm-8">
+					<div class="card__content">
+						<h3 class="card__title"><a>{{ data.title }}</a></h3>
+						<span class="card__category">
+							<a>{{ data.genre }}</a>
+						</span>
+
+						<div class="card__wrap">
+							<span class="card__rate"><i class="icon ion-ios-star"></i>{{ data.rating }}</span>
+
+							<ul class="card__list">
+								<li>HD</li>
+								<li>16+</li>
+							</ul>
+						</div>
+
+						<div style="color: white;">
+							<p>{{ data.body }}</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- end card -->
+				{% endfor %}
+	
+
+				<div class="col-12">
+					<ul class="paginator paginator--list">
+						<li class="paginator__item paginator__item--prev">
+							{% if media.has_previous %}
+							<a href="{% url 'catalog' %}?page={{ media.previous_page_number }}"><i class="icon ion-ios-arrow-back"></i></a>
+							{% else %}
+							<a href=""><i class="icon ion-ios-arrow-back"></i></a>
+							{% endif %}
+						</li>
+
+						{% for pg_num in all_pages %}
+							{% if pg_num == page_number %}
+								<li class="paginator__item paginator__item--active"><a href="{% url 'catalog' %}?page={{ pg_num }}">{{ pg_num }}</a></li>
+							{% else %}
+								<li class="paginator__item"><a href="{% url 'catalog' %}?page={{ pg_num }}">{{ pg_num }}</a></li>
+							{% endif %}
+						{% endfor %}
+	
+						<li class="paginator__item paginator__item--next">
+							{% if media.has_next %}
+								<a href="{% url 'catalog' %}?page={{ media.next_page_number }}"><i class="icon ion-ios-arrow-forward"></i></a>
+							{% else %}
+							<a href=""><i class="icon ion-ios-arrow-forward"></i></a>
+							{% endif %}
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- end catalog -->
+
+	
+	<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>
+    $(document).ready(function() {
+        $("#filter__imbd").slider({
+            range: true,
+            min: 0,
+            max: 100,
+            values: [0, 100],
+            slide: function(event, ui) {
+                // Обновление значений в соответствующих input-элементах
+                $("#filter__imbd-start").val(ui.values[0]);
+                $("#filter__imbd-end").val(ui.values[1]);
+            }
+        });
+    });
+
+	
+		const rangeInput = document.getElementById('rangeInput');
+		const output = document.getElementById('output');
+	
+		const rangeInput2 = document.getElementById('rangeInput2');
+		const output2 = document.getElementById('output2');
+
+		const rangeInput3 = document.getElementById('rangeInput3');
+		const output3 = document.getElementById('output3');
+
+		const rangeInput4 = document.getElementById('rangeInput4');
+		const output4 = document.getElementById('output4');
+	
+		rangeInput.addEventListener('input', function() {
+		  output.textContent = rangeInput.value;
+		});
+	
+		rangeInput2.addEventListener('input', function() {
+		  output2.textContent = rangeInput2.value;
+		});
+
+		rangeInput3.addEventListener('input', function() {
+			output3.textContent = rangeInput3.value;
+		  });
+
+		rangeInput4.addEventListener('input', function() {
+			output4.textContent = rangeInput4.value;
+		  });  
+	  
+</script>
+
+{% endblock %}
